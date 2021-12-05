@@ -8,6 +8,7 @@ PWM = Motor()
 led = Led()
 buzzer = Buzzer()
 
+#values get turned on and off depending on current values
 lightsOn = False
 boost = False
 forward = -2500
@@ -19,6 +20,7 @@ class MyController(Controller):
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
 
+    #define action on x press
     def on_x_press(self):
         global lightsOn
         if lightsOn:
@@ -28,6 +30,7 @@ class MyController(Controller):
             led.colorWipe(led.strip, Color(0,0,0))
             lightsOn = True
 
+    #define action on x release
     def on_x_release(self):
         global lightsOn
         if lightsOn:
@@ -45,6 +48,7 @@ class MyController(Controller):
     def on_down_arrow_press(self):
         PWM.setMotorModel(backward,backward,backward,backward)
 
+    #left and right turns
     def on_left_arrow_press(self):
         PWM.setMotorModel(2000,2000,-1500,-1500)
 
@@ -54,12 +58,14 @@ class MyController(Controller):
     def on_left_right_arrow_release(self):
         PWM.setMotorModel(0,0,0,0)
 
+    #turn buzzer on and off
     def on_circle_press(self):
         buzzer.run('1')
 
     def on_circle_release(self):
         buzzer.run('0')
 
+    #turns gears on and off
     def on_square_press(self):
         global boost
         global forward
@@ -91,8 +97,7 @@ class MyController(Controller):
 #    def on_L3_down(self):
 #        print("Stick down")
         
-
-ledOn = False
+#bind controler
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 #controller.debug = True
 controller.listen(timeout=60)
